@@ -4,7 +4,8 @@ const path = require('path')
 const {checkForAuthenticationByCookie} = require('./middlewares/auth')
 const cookieParser = require('cookie-parser')
 
-const userRouter = require('./routes/user')
+const userRouter = require('./routes/user');
+const blogRouter = require('./routes/blog');
 
 
 
@@ -22,6 +23,7 @@ app.set(__dirname,path.resolve('views'));
 
 
 app.use('/user',userRouter);
+app.use('/blog',blogRouter);
 app.get('/',function(req,res){
     res.render('home',{
     user : req.user,
