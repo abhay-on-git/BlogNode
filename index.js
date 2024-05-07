@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path')
+const Blog = require('./models/blog')
 const {checkForAuthenticationByCookie} = require('./middlewares/auth')
 const cookieParser = require('cookie-parser')
 
@@ -24,8 +25,10 @@ app.set(__dirname,path.resolve('views'));
 
 app.use('/user',userRouter);
 app.use('/blog',blogRouter);
-app.get('/',function(req,res){
+app.get('/',async function(req,res){
+    const allBlogs = await Blog.find({});
     res.render('home',{
+    blogs:allBlogs,
     user : req.user,
     });
 })

@@ -2,10 +2,26 @@
 <html lang="en">
 <head>
     <%- include('./partials/head') %>
+    <link rel="stylesheet" href="/stylesheets/home.css">
     <title>home</title>
 </head>
 <body>
     <%- include('./partials/nav') %>
+
+   <main>
+    <% blogs.forEach(blog => { %>
+        <div class="container mt-3 d-flex">
+            <div class="card" style="width: 18rem;">
+                <img src="<%= blog.coverImageURL %>" class="card-img-top">
+                <div class="card-body">
+                  <h5 class="card-title"><%= blog.title %></h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  <a href="/blog/<%=blog._id%>" class="btn btn-primary">Read</a>
+                </div>
+              </div>
+        </div>
+    <% }) %>
+   </main>
     
     <%- include('./partials/script') %>
 </body>
