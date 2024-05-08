@@ -12,7 +12,40 @@
     <img src="<%= blog.coverImageURL %>" alt="cover Image" width="500px">
     <pre class="mt-3"><%= blog.content %></pre>;
     </div>
-       
+    <div class="container mt-4 p-4">
+        <img src="<%= blog.createdBy.profileImageURL %>" width="50px">
+        <span><%= blog.createdBy.fullName %></span>
+    </div>
+    <% if (locals.user) { %>
+        <div class="container mt-4 p-4">
+            <h3>Comments</h3>
+            <form action="/blog/comment/<%= blog._id %>" method="post">
+                <div class="mb-3">
+                    <input type="text" name="content" class="form-control" id="comment" aria-describedby="comment" placeholder="Drop your Comments here...">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <div class="container">
+               <% comments.forEach(comment => { %>
+                <div class="container mt-2 p-2">
+                    <img src="<%= comment.createdBy.profileImageURL %>" width="50px">
+                    <span><%= comment.createdBy.fullName %></span>
+                    <pre><%=comment.content %></pre>
+                </div>
+               <% }) %>
+            </div>
+        </div>
+    <% }else{ %>
+        <div class="container mt-4 p-4">
+            <h3>Comments</h3>
+            <form action="/user/signin" method="get">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="comment" aria-describedby="comment" placeholder="Drop your Comments here...">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <% } %>
     <%- include('./partials/script') %>
 </body>
 </html>
