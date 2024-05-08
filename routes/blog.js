@@ -23,16 +23,28 @@ router.get('/addBlog',(req,res,next)=>{
         user : req.user,
     });
 })
+
+router.get('/:id',async(req,res)=>{
+  const id=req.params.id;
+  // console.log(id)
+  const blog = await Blog.findById(id)
+  return res.render('blog',{
+    user:req.user,
+    blog,
+  })
+})
+
 router.post('/',upload.single('coverImage'),async(req,res,next)=>{
-    const {title,content} = req.body;
-    await Blog.create({
+   const {title,content} = req.body;
+   const blog =  await Blog.create({
         title,
         content,
         coverImageURL : `/uploads/${req.file.filename}`,
         createdBy : req.user._id,
     })
-    // return res.redirect(`/blog/${Blog._id}`);
-    res.redirect('/');
+    return res.redirect(`/blog/${blog._id}`);
+    // res.redirect('/');
 })
+
 
 module.exports = router;
