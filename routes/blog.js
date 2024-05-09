@@ -59,5 +59,96 @@ router.post('/comment/:blogId',async(req,res)=>{
   return res.redirect(`/blog/${req.params.blogId}`)
 })
 
+// Like/Dislike routes
+
+router.post('/like/:blogId', async (req, res) => {
+  const blogId = req.params.blogId;
+  const userId = req.user._id;
+  
+  try {
+    // Fetch the blog post
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).send('Blog post not found');
+    }
+
+    // Check if the user has already liked the post
+    const userHasLiked = blog.likes.includes(userId);
+    const userHasDisliked = blog.dislikes.includes(userId);
+
+    if (userHasDisliked) {
+      // Remove existing dislike if present
+      await Blog.findByIdAndUpdate(blogId, {
+        $pull: { dislikes: userId },
+      });
+    }
+
+    if (userHasLiked) {
+      // User has already liked the post, remove the like
+      await Blog.findByIdAndUpdate(blogId, {
+        $pull: { likes: userId },
+      });
+    } else {
+      // User has not liked the post yet, add the like
+      await Blog.findByIdAndUpdate(blogId, {
+        $push: { likes: userId },
+      });
+    }
+
+    // Redirect back
+    res.redirect('back');
+  } catch (error) {
+    console.log(error, 'error');
+    res.status(500).send(error.message);
+  }
+});
+
+
+
+router.post('/disLike/:blogId', async (req, res) => {
+  const blogId = req.params.blogId;
+  const userId = req.user._id;
+  
+  try {
+    // Fetch the blog post
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).send('Blog post not found');
+    }
+
+    // Check if the user has already disliked the post
+    const userHasDisliked = blog.dislikes.includes(userId);
+    const userHasLiked = blog.likes.includes(userId);
+
+    if (userHasLiked) {
+      // Remove existing like if present
+      await Blog.findByIdAndUpdate(blogId, {
+        $pull: { likes: userId },
+      });
+    }
+
+    if (userHasDisliked) {
+      // User has already disliked the post, remove the dislike
+      await Blog.findByIdAndUpdate(blogId, {
+        $pull: { dislikes: userId },
+      });
+    } else {
+      // User has not disliked the post yet, add the dislike
+      await Blog.findByIdAndUpdate(blogId, {
+        $push: { dislikes: userId },
+      });
+    }
+
+    // Redirect back
+    res.redirect('back');
+  } catch (error) {
+    console.log(error, 'error');
+    res.status(500).send(error.message);
+  }
+});
+  
+
 
 module.exports = router;

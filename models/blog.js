@@ -15,7 +15,9 @@ const blogSchema = new Schema({
     createdBy:{
         type:Schema.Types.ObjectId,
         ref:'user'
-    }
+    },
+    likes:[{type:Schema.Types.ObjectId,ref:"user"}],
+    dislikes:[{type:Schema.Types.ObjectId,ref:"user"}],
 },{timestamps:true})
 
 const Blog = model('blog',blogSchema);
