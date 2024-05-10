@@ -51,17 +51,23 @@ router.post('/',upload.single('coverImage'),async(req,res,next)=>{
 // Comment routing
 
 router.post('/comment/:blogId',async(req,res)=>{
-  await Comment.create({
-    content:req.body.content,
-    blogId:req.params.blogId,
-    createdBy:req.user._id,
-  })
-  return res.redirect(`/blog/${req.params.blogId}`)
+  try {
+    await Comment.create({
+      content:req.body.content,
+      blogId:req.params.blogId,
+      createdBy:req.user._id,
+    })
+    return res.redirect(`/blog/${req.params.blogId}`)
+  } catch (error) {
+    console.log(error.message);
+    return res.redirect(`/blog/${req.params.blogId}`)
+  }
 })
 
-// Like/Dislike routes
+// Like route
 
 router.post('/like/:blogId', async (req, res) => {
+ try {
   const blogId = req.params.blogId;
   const userId = req.user._id;
   
@@ -102,12 +108,17 @@ router.post('/like/:blogId', async (req, res) => {
     console.log(error, 'error');
     res.status(500).send(error.message);
   }
+ } catch (error) {
+  console.log(error);
+  return res.redirect('/user/signin');
+ }
 });
 
 
-
+// Dislike route 
 router.post('/disLike/:blogId', async (req, res) => {
-  const blogId = req.params.blogId;
+  try {
+    const blogId = req.params.blogId;
   const userId = req.user._id;
   
   try {
@@ -147,8 +158,11 @@ router.post('/disLike/:blogId', async (req, res) => {
     console.log(error, 'error');
     res.status(500).send(error.message);
   }
-});
-  
+  } catch (error) {
+    console.log(error);
+   return res.redirect('/user/signin');
+  }
 
+});
 
 module.exports = router;
