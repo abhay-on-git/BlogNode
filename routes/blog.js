@@ -165,4 +165,32 @@ router.post('/disLike/:blogId', async (req, res) => {
 
 });
 
+router.post('/delete/:blogId', async (req, res, next) => {
+  const id = req.params.blogId;
+
+  try {
+    const blog = await Blog.findById(id).populate("createdBy");
+    console.log(blog);
+
+    const currentUserId = req.user._id; // Assuming you have a user object with an _id property
+    const blogCreatorId = blog.createdBy._id; // Extract creator's ID from the populated object
+
+    console.log(currentUserId, "CurrentUserId");
+    console.log(blogCreatorId.toString(), "blogCreatorId"); // Extract the string representation
+
+    if (currentUserId.toString() !== blogCreatorId.toString()) {
+      return res.json("You are not Authorized to Delete This Blog");
+    }
+
+    await Blog.deleteOne({ _id: id });
+    console.log("Blog Deleted");
+
+    return res.redirect('/');
+  } catch (error) {
+    console.error(error.message);
+    throw error;
+  }
+});
+
+
 module.exports = router;

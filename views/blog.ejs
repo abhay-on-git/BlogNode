@@ -33,7 +33,12 @@
     </div>
     <% if (locals.user) { %>
         <div class="container mt-4 p-4">
+           <div>
             <h3>Comments (<%= comments.length %>)</h3>
+            <form action="/blog/delete/<%= blog._id %>" method="post">
+                <button class="deleteBtn">Delete Blog</button>
+            </form>
+           </div>
             <br>
             <form action="/blog/comment/<%= blog._id %>" method="post">
                 <div class="mb-3">
