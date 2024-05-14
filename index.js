@@ -4,6 +4,7 @@ const path = require('path')
 const Blog = require('./models/blog')
 const {checkForAuthenticationByCookie} = require('./middlewares/auth')
 const cookieParser = require('cookie-parser')
+const flash = require('connect-flash');
 
 const userRouter = require('./routes/user');
 const blogRouter = require('./routes/blog');
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/blognode').then(e=>console.log('Mong
 
 app.use(express.urlencoded({extended : false}));
 app.use(cookieParser())
+app.use(flash());
 app.use(checkForAuthenticationByCookie('token'));
 app.use(express.static(path.join(__dirname, 'public')));
 

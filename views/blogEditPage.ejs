@@ -8,20 +8,20 @@
     <%- include('./partials/nav') %>
     
     <div class="container mt-4">
-        <form action="/blog" method="post" enctype="multipart/form-data">
+        <h2>Edit Your Blog Here...</h2>
+        <form action="/blog/update/<%= blog._id %>" method="post" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="coverImage" class="form-label">CoverImage</label>
-              <input type="file" name="coverImage" class="form-control" id="coverImage" aria-describedby="coverImage">
+              <input type="file" name="coverImage" class="form-control" id="coverImage" aria-describedby="coverImage    ">
             </div>
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
-              <input type="text" name="title" class="form-control" id="title" aria-describedby="title">
+              <input type="text" name="title" class="form-control" id="title" aria-describedby="title" value="<%= blog.title %>">
             </div>
             <div class="mb-3">
               <label for="content" class="form-label">Content</label>
-              <textarea class="form-control" name="content" id="content" placeholder="Type Your Content here ..."></textarea>
+              <textarea class="form-control" name="content" id="content" placeholder="Type Your Content here ..."><%= blog.content %></textarea>
             </div>
-            
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
     </div>

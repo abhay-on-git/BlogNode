@@ -192,5 +192,40 @@ router.post('/delete/:blogId', async (req, res, next) => {
   }
 });
 
+router.get('/edit/:blogId',async (req,res)=>{
+  const blogId = req.params.blogId;
+  const blog = await Blog.findById({_id : blogId});
+  console.log(blog)
+
+  return res.render('blogEditPage',{
+    user : req.user,
+    blog,
+  })
+})
+router.post('/update/:blogId', upload.single('coverImage'), async (req, res) => {
+  const blogId = req.params.blogId;
+
+  const coverImageURL = req.file ? `/uploads/${req.file.filename}` : req.body.coverImageURL; // Handle existing coverImageURL if needed
+  const { title, content } = req.body;
+
+  try {
+    const updatedBlog = await Blog.findOneAndUpdate(
+      { _id: blogId },
+      { coverImageURL, title, content },
+      { new: true } // Return the updated document
+    );
+
+    // Handle success (e.g., redirect with a success message)
+    console.log('success', 'Blog updated successfully!'); // Assuming you have flash messages implemented
+
+    res.redirect(`/blog/${updatedBlog._id}`); // Redirect to the updated blog page
+
+  } catch (error) {
+    console.error(error.message);
+    console.log('error', 'Error updating blog!'); // Handle errors with flash messages
+    res.redirect(`/blog/edit/${blogId}`); // Redirect back to the edit page
+  }
+});
+
 
 module.exports = router;
