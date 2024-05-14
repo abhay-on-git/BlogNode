@@ -215,6 +215,7 @@ router.post('/update/:blogId', upload.single('coverImage'), async (req, res) => 
       { new: true } // Return the updated document
     );
 
+    
     // Handle success (e.g., redirect with a success message)
     console.log('success', 'Blog updated successfully!'); // Assuming you have flash messages implemented
 
