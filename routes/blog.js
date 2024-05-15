@@ -215,7 +215,6 @@ router.post('/update/:blogId', upload.single('coverImage'), async (req, res) => 
       { new: true } // Return the updated document
     );
 
-    
     // Handle success (e.g., redirect with a success message)
     console.log('success', 'Blog updated successfully!'); // Assuming you have flash messages implemented
 
@@ -228,5 +227,15 @@ router.post('/update/:blogId', upload.single('coverImage'), async (req, res) => 
   }
 });
 
+router.get('/search/:inputValue',async(req,res)=>{
+  const searchInputValue = req.params.inputValue;
+  console.log(searchInputValue);
+  const blogs = await Blog.find({
+    "$or" : [
+      {"title" : {$regex : searchInputValue}}
+    ]
+  })
+  res.render('searchResult',{blogs});
+})
 
 module.exports = router;

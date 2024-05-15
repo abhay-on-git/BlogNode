@@ -26,13 +26,37 @@
             <li class="nav-item border rounded px-3 ms-2"><a class="nav-link active" href="/user/signin">Signin</a></li>
             <% } %>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" role="search" action="/blog/search/" id="searchForm">
+          <input class="form-control me-2" type="search" placeholder="Search" id="searchInput" name="searchInputValue" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>
     </div>
   </nav>
+
+  <script>
+    // Get references to the form and search input field
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+
+    // Add event listener for form submission
+    searchForm.addEventListener('submit', function(event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Get the value of the search input field
+        const searchValue = searchInput.value;
+
+        // Construct the action URL dynamically with the search input value
+        const actionURL = `/blog/search/${encodeURIComponent(searchValue)}`;
+
+        // Set the action attribute of the form to the constructed action URL
+        searchForm.setAttribute('action', actionURL);
+
+        // Submit the form
+        searchForm.submit();
+    });
+</script>
 
   <% if (locals.error) { %>
     <div class="alert-container d-flex justify-content-center mt-4 ">
